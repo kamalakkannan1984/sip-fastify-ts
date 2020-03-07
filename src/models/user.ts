@@ -163,9 +163,9 @@ userModel.getUser = (regColl: any, data: any) => {
           Domain_id: data.Domain_id,
           Username: data.Username
         })
+        .project({ _id: 0, Registered_date: 0, last_update: 0 })
         .toArray()
         .then((user: any) => {
-          console.log("user", user);
           resolve(user);
         })
     } catch (err) {

@@ -5,7 +5,7 @@
 
 export const config = {
   server: {
-    host: process.env.HOST ? process.env.HOST : 'localhost',
+    host: process.env.HOST ? process.env.HOST : '10.22.7.29',
     port: process.env.PORT ? process.env.PORT : 5001,
   },
   logger_level: process.env.LOGGER_LEVEL,

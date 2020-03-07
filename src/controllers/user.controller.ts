@@ -120,7 +120,6 @@ userController.sipUpdateStatus = async (body: any, sipRegister: any, sipDomain: 
 
 userController.sipDeleteUser = async (body: any, sipRegister: any, sipDomain: any) => {
   try {
-
     let result = {};
     let data = body;
     let val: any = null;
@@ -151,7 +150,6 @@ userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) 
     if (utils.isObject(doaminDetails)) {
       data.Domain_id = doaminDetails.domain_id;
       val = await userModel.getUser(sipRegister, data);
-      console.log(val);
       if (utils.isObject(val) && val.length > 0) {
         result = {
           output: val,
