@@ -12,18 +12,15 @@ const server: fastify.FastifyInstance<Server, IncomingMessage, ServerResponse> =
   trustProxy: true,
 });
 
-//
 server.register(require('fastify-swagger'), config.swagger_options);
 server.register(require('fastify-cors'), config.cors_options);
-server
-  .register(fastify_mongodb, {
-    url: 'mongodb://localhost:27017/sample_db1',
-    name: 'MONGO1',
-  })
-  .register(fastify_mongodb, {
-    url: 'mongodb://localhost:27017/sample_db2',
-    name: 'MONGO2',
-  });
+server.register(fastify_mongodb, {
+  url: 'mongodb://java:javadb@10.22.7.230:27017/XGREGISTAR',
+  name: 'MONGO1',
+}).register(fastify_mongodb, {
+  url: 'mongodb://smepbx:smeswitch@10.22.3.171:27017/unifiedring_pbx',
+  name: 'MONGO2',
+});
 
 //add hooks with relevant handlers
 server.addHook('preHandler', utils.formReqData);
@@ -60,7 +57,7 @@ process.on('uncaughtException', err => {
 
 /*server.listen(3000, (err: any) => {
   if (err) {
-    console.log('❌ Error: ', err);
+    console.log('Error: ', err);
     process.exit(1);
   }
   console.log(' Server Started on port - 3000 ');

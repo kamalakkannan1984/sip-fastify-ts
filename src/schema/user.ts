@@ -13,13 +13,13 @@ user.commanReq = {
     type: 'object',
     properties: {
       trans_id: { type: 'string' },
-      db_name: { type: 'string', enum: ['XGREGISTAR', 'sample_db2'] },
+      db_name: { type: 'string', enum: ['XGREGISTAR', 'unifiedring_pbx'] },
       db_operation: {
         type: 'string',
         enum: ['READ', 'WRITE', 'UPDATE', 'DELETE', 'EXECUTE'],
       },
       table_name: { type: 'string' },
-      sp_name: { type: 'string' },
+      sp_name: { type: 'string', enum: ['sip_do_user_registration', 'sip_authenticate_user_registration', 'sip_get_user_password'] },
       input: {
         type: 'object',
         properties: {
@@ -37,6 +37,7 @@ user.commanReq = {
           proxy_username: { type: 'string' },
           device_type: { type: 'string' },
           mac_address: { type: 'string' },
+          user_id: { type: 'string' }
         },
       },
     },
@@ -49,7 +50,7 @@ user.commanRes = {
     type: 'object',
     properties: {
       trans_id: { type: 'string' },
-      db_name: { type: 'string', enum: ['XGREGISTAR', 'sample_db2'] },
+      db_name: { type: 'string', enum: ['XGREGISTAR', 'unifiedring_pbx'] },
       db_operation: {
         type: 'string',
         enum: ['READ', 'WRITE', 'UPDATE', 'DELETE', 'EXECUTE'],
@@ -74,19 +75,41 @@ user.commanRes = {
 };
 
 /*sip_authenticate_user_registration */
-user.sip_auth = {
+/* mand_fields : call_id,domain_name,contact_address,username*/
+user.sip_reg_auth = {
   type: 'object',
   properties: {
     input: {
       type: 'object',
       properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
+        Call_id: { type: 'string' },
+        domain_name: { type: 'string' },
+        Contact_address: { type: 'string' },
+        Username: { type: 'string' }
       },
-      required: ['username', 'password'],
+      required: ['Call_id', 'domain_name', 'Contact_address', 'Username'],
     },
   },
 };
+
+/* sip_get_user_password*/
+/* o   mand_fields : domain_name,mobileno/username*/
+
+user.sip_get_password = {
+  type: 'object',
+  properties: {
+    input: {
+      type: 'object',
+      properties: {
+        user_id: { type: 'string' },
+        domain_name: { type: 'string' }
+      },
+      required: ['user_id', 'domain_name'],
+    },
+  },
+};
+
+
 
 /*sip_do_user_registration*/
 /*"Call_id": "121d5332-408f-1238-f1b4-83897910f890",

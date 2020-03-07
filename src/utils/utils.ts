@@ -60,3 +60,16 @@ utils.formErrorObject = (statusCode: any, message: any, err: any) => {
 
   return errorObj;
 };
+//
+utils.isObject = (val: any) => {
+  if (val === null) { return false; }
+  return ((val && val !== null && val !== 'undefined'));
+};
+
+utils.dateDiffSec = (val: any) => {
+  const date1: any = new Date(val);
+  const date2: any = new Date();
+  const diffTime = Math.abs(date2 - date1);
+  return Math.ceil(diffTime / (1000 * 60));
+};
+//
