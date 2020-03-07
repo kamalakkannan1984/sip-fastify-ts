@@ -18,7 +18,7 @@ const userHandler: any = {};
 userHandler.comman = async function (req: any, res: any, done: any) {
   try {
     let body = req.body;
-    let result = '';
+    let result: any = {};
     let ajv = new Ajv();
     let validate: any = '';
 
@@ -53,7 +53,46 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           const dirDomains = await this.mongo.MONGO2.db.collection('dir_domains');
           const dirUsers = await this.mongo.MONGO2.db.collection('dir_users');
           result = await userController.sipGetUserPassword(body.input, dirUsers, dirDomains);
+          console.log(result.output);
+          body.msg = result.msg;
+          body.output = result.output;
+          res.send(body);
+        } else {
+          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+        }
+        break;
+      case 'sip_update_registered_status':
+        validate = ajv.compile(userSchema.sip_update_status);
+        if (validate(body)) {
+          const sipRegister = await this.mongo.MONGO2.db.collection('Sip_Register');
+          const sipDomain = await this.mongo.MONGO2.db.collection('Sip_domain');
+          result = await userController.sipUpdateStatus(body.input, sipRegister, sipDomain);
           body.msg = result;
+          res.send(body);
+        } else {
+          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+        }
+        break;
+      case 'sip_delete_user_registration':
+        validate = ajv.compile(userSchema.sip_delete_user);
+        if (validate(body)) {
+          const sipRegister = await this.mongo.MONGO2.db.collection('Sip_Register');
+          const sipDomain = await this.mongo.MONGO2.db.collection('Sip_domain');
+          result = await userController.sipDeleteUser(body.input, sipRegister, sipDomain);
+          body.msg = result;
+          res.send(body);
+        } else {
+          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+        }
+        break;
+      case 'sip_get_Registered_user_info':
+        validate = ajv.compile(userSchema.sip_get_user);
+        if (validate(body)) {
+          const sipRegister = await this.mongo.MONGO2.db.collection('Sip_Register');
+          const sipDomain = await this.mongo.MONGO2.db.collection('Sip_domain');
+          result = await userController.sipGetUser(body.input, sipRegister, sipDomain);
+          body.msg = result.msg;
+          body.output = result.output;
           res.send(body);
         } else {
           res.send({ msg: { status_code: 400, message: validate.errors[0].message } });

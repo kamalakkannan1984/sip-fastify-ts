@@ -104,11 +104,70 @@ userModel.checkPassword = (dirUsers: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('checkPassword');
-      const res = await dirUsers.find({
+      const res = await dirUsers.findOne({
         user_id: data.user_id, domain_id: data.Domain_id
-      }).count();
-      console.log(res);
+      });
       resolve(res);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+//updatePassword
+userModel.updateStatus = (regColl: any, data: any) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log('updateStatus');
+      const res = await regColl.updateOne({
+        Call_id: data.Call_id,
+        Username: data.Username,
+        Domain_id: data.Domain_id
+      }, { $set: { status: data.status } });
+
+      resolve(res);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+//deleteUser
+userModel.deleteUser = (regColl: any, data: any) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log('deleteUser');
+      /* delete from Sip_Registrar where Call_id=@caller_id and Domain_id=@Domain_id and 
+		Username=@Username and Contact_address=@Contact_address
+*/
+      const deleteItem = await regColl.deleteMany({
+        Call_id: data.Call_id,
+        Domain_id: data.Domain_id,
+        Username: data.Username,
+        Contact_address: data.Contact_address
+      });
+      resolve(deleteItem);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+//getUser
+userModel.getUser = (regColl: any, data: any) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log('getUser');
+      regColl
+        .find({
+          Domain_id: data.Domain_id,
+          Username: data.Username
+        })
+        .toArray()
+        .then((user: any) => {
+          console.log("user", user);
+          resolve(user);
+        })
     } catch (err) {
       reject(err);
     }

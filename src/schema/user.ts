@@ -19,7 +19,14 @@ user.commanReq = {
         enum: ['READ', 'WRITE', 'UPDATE', 'DELETE', 'EXECUTE'],
       },
       table_name: { type: 'string' },
-      sp_name: { type: 'string', enum: ['sip_do_user_registration', 'sip_authenticate_user_registration', 'sip_get_user_password'] },
+      sp_name: {
+        type: 'string', enum: ['sip_do_user_registration',
+          'sip_authenticate_user_registration',
+          'sip_get_user_password',
+          'sip_update_registered_status',
+          'sip_delete_user_registration',
+          'sip_get_Registered_user_info']
+      },
       input: {
         type: 'object',
         properties: {
@@ -57,10 +64,7 @@ user.commanRes = {
       },
       table_name: { type: 'string' },
       sp_name: { type: 'string' },
-      input: {},
-      output: {
-        type: 'object',
-      },
+      output: {},
       msg: {
         type: 'object',
         properties: {
@@ -109,8 +113,67 @@ user.sip_get_password = {
   },
 };
 
+/* @Call_idvarchar(50),
+@Domain_namevarchar(150),
+@Username varchar(100),
+@status int
+*/
+/* sip_update_registered_status*/
+user.sip_update_status = {
+  type: 'object',
+  properties: {
+    input: {
+      type: 'object',
+      properties: {
+        Call_id: { type: 'string' },
+        domain_name: { type: 'string' },
+        Username: { type: 'string' },
+        status: { type: 'number' }
 
+      },
+      required: ['Call_id', 'domain_name', 'Username', 'status'],
+    },
+  },
+};
 
+/* sip_delete_user_registration */
+/* @caller_idvarchar(50),
+@Domain_namevarchar(150),
+@Contact_addressvarchar(100),
+@Username varchar(100)
+*/
+
+user.sip_delete_user = {
+  type: 'object',
+  properties: {
+    input: {
+      type: 'object',
+      properties: {
+        Call_id: { type: 'string' },
+        domain_name: { type: 'string' },
+        Username: { type: 'string' },
+        Contact_address: { type: 'string' }
+      },
+      required: ['Call_id', 'domain_name', 'Username', 'Contact_address'],
+    },
+  },
+};
+
+/* sip_get_Registered_user_info  */
+
+user.sip_get_user = {
+  type: 'object',
+  properties: {
+    input: {
+      type: 'object',
+      properties: {
+        domain_name: { type: 'string' },
+        Username: { type: 'string' }
+      },
+      required: ['domain_name', 'Username'],
+    },
+  },
+};
 /*sip_do_user_registration*/
 /*"Call_id": "121d5332-408f-1238-f1b4-83897910f890",
         "domain_name": "vectoneapp.webrtc.mundio.com",

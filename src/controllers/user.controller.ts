@@ -73,20 +73,102 @@ userController.sipGetUserPassword = async (body: any, dirUsers: any, dirDomains:
     let doaminDetails = await userModel.getDirDomains(dirDomains, data.domain_name);
     if (utils.isObject(doaminDetails)) {
       data.Domain_id = doaminDetails.id;
-      console.log(data);
       val = await userModel.checkPassword(dirUsers, data);
-      if (val) {
-        result = { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got user password' };
+      if (utils.isObject(val)) {
+        result = {
+          output: { password: val.password },
+          msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got user password' }
+        };
       } else {
-        result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'No entry available for user_id in dir_users' };
+        result = {
+          output: {},
+          msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'No entry available for user_id in dir_users' }
+        };
       }
 
+    } else {
+      result = { msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' } };
+    }
+    return result;
+  } catch (err) {
+    return { msg: { status_code: 500, err_code: -1, affected_rows: 0, message: 'internal server error' } };
+  }
+};
+
+userController.sipUpdateStatus = async (body: any, sipRegister: any, sipDomain: any) => {
+  try {
+    let result = {};
+    let data = body;
+    let val: any = null;
+    let doaminDetails = await userModel.getDomains(sipDomain, data.domain_name);
+    if (utils.isObject(doaminDetails)) {
+      data.Domain_id = doaminDetails.domain_id;
+      val = await userModel.updateStatus(sipRegister, data);
+      if (val.matchedCount) {
+        result = { status_code: 200, err_code: 0, affected_rows: 1, message: 'Success to update the status' };
+      } else {
+        result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'Failure to change the status' };
+      }
     } else {
       result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' };
     }
     return result;
   } catch (err) {
     return { status_code: 500, err_code: -1, affected_rows: 0, message: 'internal server error' };
+  }
+};
+
+userController.sipDeleteUser = async (body: any, sipRegister: any, sipDomain: any) => {
+  try {
+
+    let result = {};
+    let data = body;
+    let val: any = null;
+    let doaminDetails = await userModel.getDomains(sipDomain, data.domain_name);
+    if (utils.isObject(doaminDetails)) {
+      data.Domain_id = doaminDetails.domain_id;
+      val = await userModel.deleteUser(sipRegister, data);
+      if (val.deletedCount) {
+        result = { status_code: 200, err_code: 0, affected_rows: 1, message: 'Successfully Registration deleted' };
+      } else {
+        result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'Failure to delete registration' };
+      }
+    } else {
+      result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' };
+    }
+    return result;
+  } catch (err) {
+    return { status_code: 500, err_code: -1, affected_rows: 0, message: 'internal server error' };
+  }
+};
+
+userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) => {
+  try {
+    let result = {};
+    let data = body;
+    let val: any = null;
+    let doaminDetails = await userModel.getDomains(sipDomain, data.domain_name);
+    if (utils.isObject(doaminDetails)) {
+      data.Domain_id = doaminDetails.domain_id;
+      val = await userModel.getUser(sipRegister, data);
+      console.log(val);
+      if (utils.isObject(val) && val.length > 0) {
+        result = {
+          output: val,
+          msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got Registered User Info Details' }
+        };
+      } else {
+        result = {
+          output: {},
+          msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'No entry found in Sip_Register' }
+        };
+      }
+    } else {
+      result = { msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'No entry found in Sip_domain' } };
+    }
+    return result;
+  } catch (err) {
+    return { msg: { status_code: 500, err_code: -1, affected_rows: 0, message: 'internal server error' } };
   }
 };
 
