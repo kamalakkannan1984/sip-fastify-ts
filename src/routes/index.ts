@@ -11,7 +11,7 @@ export const configureRoutes = (fastify: any, options: any, done: any) => {
   const apihandler = require('../handlers/user');
   const opts = {
     schema: {
-      body: userSchema.commanReq.body,
+      //body: userSchema.commanReq.body,
       response: userSchema.commanRes,
     },
   };

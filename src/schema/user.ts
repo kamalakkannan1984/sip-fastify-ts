@@ -64,6 +64,26 @@ user.commanRes = {
       },
       table_name: { type: 'string' },
       sp_name: { type: 'string' },
+      input: {
+        type: 'object',
+        properties: {
+          Call_id: { type: 'string' },
+          domain_name: { type: 'string' },
+          Contact_address: { type: 'string' },
+          Ipaddress: { type: 'string' },
+          IpAddress_type: { type: 'number' },
+          Username: { type: 'string' },
+          Password: { type: 'string' },
+          AAA: { type: 'number' },
+          expires: { type: 'number' },
+          Request_cseq: { type: 'number' },
+          status: { type: 'number' },
+          proxy_username: { type: 'string' },
+          device_type: { type: 'string' },
+          mac_address: { type: 'string' },
+          user_id: { type: 'string' }
+        },
+      },
       output: {},
       msg: {
         type: 'object',

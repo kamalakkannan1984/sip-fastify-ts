@@ -25,13 +25,20 @@ userController.sipRegister = async (body: any, regColl: any, domainColl: any) =>
       data.last_update = new Date().toISOString();
       delete data.domain_name;
       await userModel.saveRegister(regColl, data);
-      result = { status_code: 200, err_code: 0, affected_rows: 1, message: 'Sip registration completed' };
+      const val = await userModel.getUser(regColl, data);
+      result = {
+        output: val,
+        msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Sip registration completed' }
+      };
     } else {
-      result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' };
+      result = {
+        output: {},
+        msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' }
+      };
     }
     return result;
   } catch (err) {
-    return { status_code: 500, err_code: -1, affected_rows: 0, message: 'internal server error' };
+    return { msg: { status_code: 500, err_code: -1, affected_rows: 0, message: 'internal server error' } };
   }
 };
 
@@ -47,9 +54,9 @@ userController.sipRegisterAuth = async (body: any, sipRegister: any, sipDomain: 
       val = await userModel.authendicate(sipRegister, data);
       if (utils.isObject(val)) {
         if (utils.dateDiffSec(val.last_update) <= val.expires) {
-          result = { status_code: 200, err_code: 0, affected_rows: 1, message: 'No need authentication' };
+          result = { status_code: 200, err_code: 1, affected_rows: 1, message: 'No need authentication' };
         } else {
-          result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'Need authentication' };
+          result = { status_code: 200, err_code: 0, affected_rows: 0, message: 'Need authentication' };
         }
       } else {
         result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'Need authentication' };

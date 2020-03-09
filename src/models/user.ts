@@ -163,7 +163,7 @@ userModel.getUser = (regColl: any, data: any) => {
           Domain_id: data.Domain_id,
           Username: data.Username
         })
-        .project({ _id: 0, Registered_date: 0, last_update: 0 })
+        .project({ _id: 0, Contact_address: 1, proxy_username: 1, status: 1, device_type: 1, Ipaddress: 1, prev_proxy_username: 1 })
         .toArray()
         .then((user: any) => {
           resolve(user);

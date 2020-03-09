@@ -29,10 +29,12 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           const Sip_Register = await this.mongo.MONGO2.db.collection('Sip_Register');
           const Sip_domain = await this.mongo.MONGO2.db.collection('Sip_domain');
           result = await userController.sipRegister(body.input, Sip_Register, Sip_domain);
-          body.msg = result;
+          body.msg = result.msg;
+          body.output = result.output;
           res.send(body);
         } else {
-          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+          body.msg = { status_code: 400, message: validate.errors[0].message };
+          res.send(body);
         }
         break;
       case 'sip_authenticate_user_registration':
@@ -44,7 +46,8 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           body.msg = result;
           res.send(body);
         } else {
-          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+          body.msg = { status_code: 400, message: validate.errors[0].message };
+          res.send(body);
         }
         break;
       case 'sip_get_user_password':
@@ -58,7 +61,8 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           body.output = result.output;
           res.send(body);
         } else {
-          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+          body.msg = { status_code: 400, message: validate.errors[0].message };
+          res.send(body);
         }
         break;
       case 'sip_update_registered_status':
@@ -70,7 +74,8 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           body.msg = result;
           res.send(body);
         } else {
-          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+          body.msg = { status_code: 400, message: validate.errors[0].message };
+          res.send(body);
         }
         break;
       case 'sip_delete_user_registration':
@@ -82,7 +87,8 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           body.msg = result;
           res.send(body);
         } else {
-          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+          body.msg = { status_code: 400, message: validate.errors[0].message };
+          res.send(body);
         }
         break;
       case 'sip_get_Registered_user_info':
@@ -95,7 +101,8 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           body.output = result.output;
           res.send(body);
         } else {
-          res.send({ msg: { status_code: 400, message: validate.errors[0].message } });
+          body.msg = { status_code: 400, message: validate.errors[0].message };
+          res.send(body);
         }
         break;
       default:

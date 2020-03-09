@@ -2,7 +2,8 @@
  * @createdBy Kamal
  * @createdOn 05 Jan 2020
  */
-
+import Ajv from 'ajv';
+import { userSchema } from '../schema/user';
 /*const userModel = require('../models/user');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
@@ -11,7 +12,18 @@ let appConfig = require('../config/app'); */
 export const utils: any = {};
 //form  post req data
 utils.formReqData = (req: any, reply: any, done: any) => {
-  done();
+  //console.log(req.body);
+  let body = req.body;
+  let validate: any = '';
+  let ajv = new Ajv();
+  validate = ajv.compile(userSchema.commanReq.body);
+  if (validate(body)) {
+    done();
+  } else {
+    body.msg = { status_code: 400, message: validate.errors[0].message };
+    reply.send(body);
+  }
+
 };
 
 //process response Object
