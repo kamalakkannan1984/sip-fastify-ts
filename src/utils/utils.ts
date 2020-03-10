@@ -4,10 +4,7 @@
  */
 import Ajv from 'ajv';
 import { userSchema } from '../schema/user';
-/*const userModel = require('../models/user');
-const jwt = require('jsonwebtoken');
-const axios = require('axios');
-let appConfig = require('../config/app'); */
+
 
 export const utils: any = {};
 //form  post req data
@@ -20,7 +17,7 @@ utils.formReqData = (req: any, reply: any, done: any) => {
   if (validate(body)) {
     done();
   } else {
-    body.msg = { status_code: 400, message: validate.errors[0].message };
+    body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
     reply.send(body);
   }
 

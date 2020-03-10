@@ -174,4 +174,21 @@ userModel.getUser = (regColl: any, data: any) => {
   });
 };
 
+//saveLog
+userModel.saveLog = (data: any, transLogColl: any) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log('save log data');
+      let dataArray: any = {};
+      dataArray = data;
+      dataArray.dateTime = new Date().toLocaleString();
+      const res = transLogColl.insertOne(data);
+      resolve(res);
+    } catch (err) {
+      reject(err);
+    }
+
+  });
+}
+
 //module.exports = userModel;

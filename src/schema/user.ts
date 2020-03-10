@@ -63,7 +63,14 @@ user.commanRes = {
         enum: ['READ', 'WRITE', 'UPDATE', 'DELETE', 'EXECUTE'],
       },
       table_name: { type: 'string' },
-      sp_name: { type: 'string' },
+      sp_name: {
+        type: 'string', enum: ['sip_do_user_registration',
+          'sip_authenticate_user_registration',
+          'sip_get_user_password',
+          'sip_update_registered_status',
+          'sip_delete_user_registration',
+          'sip_get_Registered_user_info']
+      },
       input: {
         type: 'object',
         properties: {
@@ -92,6 +99,7 @@ user.commanRes = {
           status_code: { type: 'number' },
           err_code: { type: 'number' },
           message: { type: 'string' },
+          error: {}
         },
       },
     },

@@ -59,7 +59,7 @@ userController.sipRegisterAuth = async (body: any, sipRegister: any, sipDomain: 
           result = { status_code: 200, err_code: 0, affected_rows: 0, message: 'Need authentication' };
         }
       } else {
-        result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'Need authentication' };
+        result = { status_code: 422, err_code: 0, affected_rows: 0, message: 'Need authentication' };
       }
 
     } else {

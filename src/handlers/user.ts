@@ -7,6 +7,7 @@
 import Ajv from 'ajv';
 import { userController } from '../controllers/user.controller';
 import { userSchema } from '../schema/user';
+import { userModel } from '../models/user';
 const userHandler: any = {};
 
 /**
@@ -21,7 +22,7 @@ userHandler.comman = async function (req: any, res: any, done: any) {
     let result: any = {};
     let ajv = new Ajv();
     let validate: any = '';
-
+    const transaction_log = await this.mongo.MONGO2.db.collection('transaction_log');
     switch (body.sp_name) {
       case 'sip_do_user_registration':
         validate = ajv.compile(userSchema.sip_do_reg);
@@ -31,11 +32,16 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           result = await userController.sipRegister(body.input, Sip_Register, Sip_domain);
           body.msg = result.msg;
           body.output = result.output;
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         } else {
-          body.msg = { status_code: 400, message: validate.errors[0].message };
+          body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
+          await userModel.saveLog(body, transaction_log);
+          console.log("after LOg");
           res.send(body);
         }
+        // create transaction_log table
+
         break;
       case 'sip_authenticate_user_registration':
         validate = ajv.compile(userSchema.sip_reg_auth);
@@ -44,9 +50,11 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           const sipDomain = await this.mongo.MONGO2.db.collection('Sip_domain');
           result = await userController.sipRegisterAuth(body.input, sipRegister, sipDomain);
           body.msg = result;
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         } else {
-          body.msg = { status_code: 400, message: validate.errors[0].message };
+          body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         }
         break;
@@ -56,12 +64,13 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           const dirDomains = await this.mongo.MONGO2.db.collection('dir_domains');
           const dirUsers = await this.mongo.MONGO2.db.collection('dir_users');
           result = await userController.sipGetUserPassword(body.input, dirUsers, dirDomains);
-          console.log(result.output);
           body.msg = result.msg;
           body.output = result.output;
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         } else {
-          body.msg = { status_code: 400, message: validate.errors[0].message };
+          body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         }
         break;
@@ -72,9 +81,11 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           const sipDomain = await this.mongo.MONGO2.db.collection('Sip_domain');
           result = await userController.sipUpdateStatus(body.input, sipRegister, sipDomain);
           body.msg = result;
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         } else {
-          body.msg = { status_code: 400, message: validate.errors[0].message };
+          body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         }
         break;
@@ -85,9 +96,11 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           const sipDomain = await this.mongo.MONGO2.db.collection('Sip_domain');
           result = await userController.sipDeleteUser(body.input, sipRegister, sipDomain);
           body.msg = result;
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         } else {
-          body.msg = { status_code: 400, message: validate.errors[0].message };
+          body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         }
         break;
@@ -99,9 +112,11 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           result = await userController.sipGetUser(body.input, sipRegister, sipDomain);
           body.msg = result.msg;
           body.output = result.output;
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         } else {
-          body.msg = { status_code: 400, message: validate.errors[0].message };
+          body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
+          await userModel.saveLog(body, transaction_log);
           res.send(body);
         }
         break;
