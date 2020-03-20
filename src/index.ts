@@ -14,18 +14,16 @@ const server: fastify.FastifyInstance<Server, IncomingMessage, ServerResponse> =
 
 server.register(require('fastify-swagger'), config.swagger_options);
 server.register(require('fastify-cors'), config.cors_options);
+//mongodb://smepbx:smeswitch@10.22.3.171:27017/unifiedring_pbx
+//10.22.3.172:27017
+//10.30.3.161:27017
 server.register(fastify_mongodb, {
   url: 'mongodb://java:javadb@10.22.7.230:27017/XGREGISTAR',
   name: 'MONGO1',
 }).register(fastify_mongodb, {
-  url: 'mongodb://smepbx:smeswitch@10.22.3.171:27017/unifiedring_pbx',
+  url: 'mongodb://k8s-master:27017,node-2:27017,node-1:27017/exampleDB?w=0&readPreference=nearest&replicaSet=replica-mundio&auto_reconnect=true',
   name: 'MONGO2',
 });
-
-//add hooks with relevant handlers
-server.addHook('preHandler', utils.formReqData);
-server.addHook('onResponse', utils.formResData);
-server.addHook('onError', utils.handleError);
 
 //decorate functions
 server
@@ -45,6 +43,11 @@ const ajv = new Ajv({
   nullable: true,
 });
 
+//add hooks with relevant handlers
+server.addHook('preHandler', utils.formReqData);
+server.addHook('onResponse', utils.formResData);
+server.addHook('onError', utils.handleError);
+
 //set fastify default schema compiler
 server.setSchemaCompiler(schema => {
   return ajv.compile(schema);
@@ -55,19 +58,11 @@ process.on('uncaughtException', err => {
   server.log.error(err);
 });
 
-/*server.listen(3000, (err: any) => {
-  if (err) {
-    console.log('Error: ', err);
-    process.exit(1);
-  }
-  console.log(' Server Started on port - 3000 ');
-}); */
-
 // Run the server!
 const start = async () => {
   try {
     let host: any = config.server;
-    await server.listen(host);
+    server.listen(host);
   } catch (err) {
     server.log.error(err);
     process.exit(1);

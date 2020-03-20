@@ -125,8 +125,6 @@ user.sip_reg_auth = {
 };
 
 /* sip_get_user_password*/
-/* o   mand_fields : domain_name,mobileno/username*/
-
 user.sip_get_password = {
   type: 'object',
   properties: {
@@ -141,11 +139,7 @@ user.sip_get_password = {
   },
 };
 
-/* @Call_idvarchar(50),
-@Domain_namevarchar(150),
-@Username varchar(100),
-@status int
-*/
+
 /* sip_update_registered_status*/
 user.sip_update_status = {
   type: 'object',
@@ -165,12 +159,6 @@ user.sip_update_status = {
 };
 
 /* sip_delete_user_registration */
-/* @caller_idvarchar(50),
-@Domain_namevarchar(150),
-@Contact_addressvarchar(100),
-@Username varchar(100)
-*/
-
 user.sip_delete_user = {
   type: 'object',
   properties: {
@@ -188,7 +176,6 @@ user.sip_delete_user = {
 };
 
 /* sip_get_Registered_user_info  */
-
 user.sip_get_user = {
   type: 'object',
   properties: {
@@ -202,25 +189,8 @@ user.sip_get_user = {
     },
   },
 };
+
 /*sip_do_user_registration*/
-/*"Call_id": "121d5332-408f-1238-f1b4-83897910f890",
-        "domain_name": "vectoneapp.webrtc.mundio.com",
-        "Contact_address": "79.11.57.202",
-        "Ipaddress": "79.11.57.204",
-        "IpAddress_type": "0",
-        "Password": "243536546",
-        "AAA": "1",
-        "expires": "3600",
-        "Request_cseq": "8743909",
-        "status": "1",
-        "proxy_username": "",
-        "device_type": "",
-        "mac_address": "" */
-/* o   mand_fields : call_id,domain_name,contact_address,ipaddress,ipaddress_type,username,
-
-      password,aaa,expires,request_cseq,proxy_username,device_type
-
-o   opt fields       :  status,mac_address*/
 user.sip_do_reg = {
   type: 'object',
   properties: {

@@ -182,7 +182,7 @@ userModel.saveLog = (data: any, transLogColl: any) => {
       let dataArray: any = {};
       dataArray = data;
       dataArray.dateTime = new Date().toLocaleString();
-      const res = transLogColl.insertOne(data);
+      const res = await transLogColl.insertOne(data);
       resolve(res);
     } catch (err) {
       reject(err);

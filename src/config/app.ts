@@ -29,7 +29,7 @@ export const config = {
     exposeRoute: true,
     routePrefix: '/api/documentation',
     swagger: {
-      host: `${process.env.HOST ? process.env.HOST : '10.22.7.29'}:${process.env.PORT ? process.env.PORT : 5001}`,
+      host: `${process.env.HOST ? process.env.HOST : 'localhost'}:${process.env.PORT ? process.env.PORT : 5001}`,
       info: {
         title: 'SIP',
         description: 'sip api swagger documentation',

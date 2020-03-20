@@ -37,7 +37,6 @@ userHandler.comman = async function (req: any, res: any, done: any) {
         } else {
           body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
           await userModel.saveLog(body, transaction_log);
-          console.log("after LOg");
           res.send(body);
         }
         // create transaction_log table
