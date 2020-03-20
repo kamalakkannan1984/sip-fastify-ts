@@ -1,11 +1,13 @@
 /**
- *
+ * @createdBy Kamal
+ * @createdOn 05th Mar 2020
  */
 
 export const userModel: any = {};
 
 /**
- * @param {String} userName - where codition to fetch data
+ * @param {String} userName - where condition to fetch data
+ * @description - Find the user name
  */
 userModel.findUserByUsername = (userName: string) => {
   return new Promise(async (resolve, reject) => {
@@ -17,11 +19,15 @@ userModel.findUserByUsername = (userName: string) => {
   });
 };
 
-userModel.getDomains = (domainColl: any, domain_name: any) => {
+/**
+ * @param {String} domain_name - Domain name
+ * @param {any} domainColl - Sip_domain collection
+ * @description - Check the domain collection is the domain is available or not
+ */
+userModel.getDomains = (domainColl: any, domain_name: string) => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await domainColl.findOne({ domain_name: domain_name, active: 1 }, { _id: 0, domain_id: 1 });
-
       resolve(res);
     } catch (err) {
       reject(err);
@@ -29,11 +35,15 @@ userModel.getDomains = (domainColl: any, domain_name: any) => {
   });
 };
 
-
-userModel.getDirDomains = (domainColl: any, domain_name: any) => {
+/**
+ * @param {String} domain_name - Domain name
+ * @param {any} dirDomainColl - dir_domains collection
+ * @description - Check the dir domains collection is the domain available or not
+ */
+userModel.getDirDomains = (dirDomainColl: any, domain_name: string) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await domainColl.findOne({ domain_name: domain_name }, { _id: 0, domain_id: 1 });
+      const res = await dirDomainColl.findOne({ domain_name: domain_name }, { _id: 0, domain_id: 1 });
       resolve(res);
     } catch (err) {
       reject(err);
@@ -41,12 +51,16 @@ userModel.getDirDomains = (domainColl: any, domain_name: any) => {
   });
 };
 
-userModel.saveRegister = (regColl: any, data: any) => {
+/**
+ * @param {any} data - data object 
+ * @param {any} sipRegColl - Sip_Register collection
+ * @description - Save the user information to sip register table 
+ */
+userModel.saveRegister = (sipRegColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('registration data');
-      //console.log(data);
-      const res = regColl.insertOne(data);
+      const res = sipRegColl.insertOne(data);
       resolve(res);
     } catch (err) {
       reject(err);
@@ -54,11 +68,16 @@ userModel.saveRegister = (regColl: any, data: any) => {
   });
 };
 
-userModel.deleteRegister = (regColl: any, data: any) => {
+/**
+ * @param {any} data - data object 
+ * @param {any} sipRegColl - Sip_Register collection 
+ * @description - Delete many registered user
+ */
+userModel.deleteRegister = (sipRegColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('delete register');
-      const deleteItem = regColl.deleteMany({
+      const deleteItem = sipRegColl.deleteMany({
         Username: data.Username,
         Domain_id: data.Domain_id,
         device_type: data.device_type,
@@ -70,24 +89,16 @@ userModel.deleteRegister = (regColl: any, data: any) => {
   });
 };
 
-
-userModel.authendicate = (regColl: any, data: any) => {
+/**
+ * @param {any} data - data object 
+ * @param {any} sipRegColl - Sip_Register collection 
+ * @description - Authendicate the registered user
+ */
+userModel.authendicate = (sipRegColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('authendicate');
-      /*regColl
-        .find({
-          Call_id: data.Call_id, Domain_id: data.Domain_id,
-          Username: data.Username, Contact_address: data.Contact_address
-        })
-        .toArray()
-        .then((user: any) => {
-          console.log("user", user);
-          resolve(user);
-        }).catch((err: any) => {
-          console.log(err);
-        }); */
-      const res = await regColl.findOne({
+      const res = await sipRegColl.findOne({
         Call_id: data.Call_id, Domain_id: data.Domain_id,
         Username: data.Username, Contact_address: data.Contact_address
       });
@@ -99,12 +110,16 @@ userModel.authendicate = (regColl: any, data: any) => {
   });
 };
 
-//checkPassword
-userModel.checkPassword = (dirUsers: any, data: any) => {
+/**
+ * @param {any} data - data object 
+ * @param {any} dirUsersColl - dir_users collection 
+ * @description - checkPassword for registered user
+ */
+userModel.checkPassword = (dirUsersColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('checkPassword');
-      const res = await dirUsers.findOne({
+      const res = await dirUsersColl.findOne({
         user_id: data.user_id, domain_id: data.Domain_id
       });
       resolve(res);
@@ -114,12 +129,16 @@ userModel.checkPassword = (dirUsers: any, data: any) => {
   });
 };
 
-//updatePassword
-userModel.updateStatus = (regColl: any, data: any) => {
+/**
+ * @param {any} data - data object 
+ * @param {any} sipRegColl - Sip_Register collection 
+ * @description - update status for registered user
+ */
+userModel.updateStatus = (sipRegColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('updateStatus');
-      const res = await regColl.updateOne({
+      const res = await sipRegColl.updateOne({
         Call_id: data.Call_id,
         Username: data.Username,
         Domain_id: data.Domain_id
@@ -132,15 +151,16 @@ userModel.updateStatus = (regColl: any, data: any) => {
   });
 };
 
-//deleteUser
-userModel.deleteUser = (regColl: any, data: any) => {
+/**
+ * @param {any} data - data object 
+ * @param {any} sipRegColl - Sip_Register collection 
+ * @description - deleteUser for registered user
+ */
+userModel.deleteUser = (sipRegColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('deleteUser');
-      /* delete from Sip_Registrar where Call_id=@caller_id and Domain_id=@Domain_id and 
-		Username=@Username and Contact_address=@Contact_address
-*/
-      const deleteItem = await regColl.deleteMany({
+      const deleteItem = await sipRegColl.deleteMany({
         Call_id: data.Call_id,
         Domain_id: data.Domain_id,
         Username: data.Username,
@@ -153,12 +173,16 @@ userModel.deleteUser = (regColl: any, data: any) => {
   });
 };
 
-//getUser
-userModel.getUser = (regColl: any, data: any) => {
+/**
+ * @param {any} data - data object 
+ * @param {any} sipRegColl - Sip_Register collection 
+ * @description - Get user information for registered user
+ */
+userModel.getUser = (sipRegColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('getUser');
-      regColl
+      sipRegColl
         .find({
           Domain_id: data.Domain_id,
           Username: data.Username
@@ -174,7 +198,11 @@ userModel.getUser = (regColl: any, data: any) => {
   });
 };
 
-//saveLog
+/**
+ * @param {any} data - data object 
+ * @param {any} transLogColl - transaction_log collection 
+ * @description - save log for every transaction 
+ */
 userModel.saveLog = (data: any, transLogColl: any) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -189,6 +217,4 @@ userModel.saveLog = (data: any, transLogColl: any) => {
     }
 
   });
-}
-
-//module.exports = userModel;
+};

@@ -9,9 +9,10 @@ export const userController: any = {};
 
 /**
  *
- * @param {Object} req - request object
- * @param {Object} reply - response object
- * @description - user signup function
+ * @param {Object} body - body object
+ * @param {Object} regColl - Sip_register collection
+ * @param {Object} domainColl - Sip_domain collection
+ * @description - sip registration
  */
 userController.sipRegister = async (body: any, regColl: any, domainColl: any) => {
   try {
@@ -42,9 +43,15 @@ userController.sipRegister = async (body: any, regColl: any, domainColl: any) =>
   }
 };
 
+/**
+ *
+ * @param {Object} body - body object
+ * @param {Object} regColl - Sip_register collection
+ * @param {Object} domainColl - Sip_domain collection
+ * @description - sip registration authendication
+ */
 userController.sipRegisterAuth = async (body: any, sipRegister: any, sipDomain: any) => {
   try {
-
     let result = {};
     let data = body;
     let val: any = null;
@@ -71,6 +78,13 @@ userController.sipRegisterAuth = async (body: any, sipRegister: any, sipDomain: 
   }
 };
 
+/**
+ *
+ * @param {Object} body - body object
+ * @param {Object} dirUsers - dir_users collection
+ * @param {Object} dirDomains - dir_domain collection
+ * @description - sip registration authendication
+ */
 userController.sipGetUserPassword = async (body: any, dirUsers: any, dirDomains: any) => {
   try {
 
@@ -102,6 +116,14 @@ userController.sipGetUserPassword = async (body: any, dirUsers: any, dirDomains:
   }
 };
 
+
+/**
+ *
+ * @param {Object} body - body object
+ * @param {Object} sipRegister - sip_users collection
+ * @param {Object} sipDomain - sip_domain collection
+ * @description - sip register update status
+ */
 userController.sipUpdateStatus = async (body: any, sipRegister: any, sipDomain: any) => {
   try {
     let result = {};
@@ -125,6 +147,13 @@ userController.sipUpdateStatus = async (body: any, sipRegister: any, sipDomain: 
   }
 };
 
+/**
+ *
+ * @param {Object} body - body object
+ * @param {Object} sipRegister - sip_users collection
+ * @param {Object} sipDomain - sip_domain collection
+ * @description -  sip delete user
+ */
 userController.sipDeleteUser = async (body: any, sipRegister: any, sipDomain: any) => {
   try {
     let result = {};
@@ -148,6 +177,13 @@ userController.sipDeleteUser = async (body: any, sipRegister: any, sipDomain: an
   }
 };
 
+/**
+ *
+ * @param {Object} body - body object
+ * @param {Object} sipRegister - sip_users collection
+ * @param {Object} sipDomain - sip_domain collection
+ * @description -  sip get user
+ */
 userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) => {
   try {
     let result = {};
@@ -176,5 +212,3 @@ userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) 
     return { msg: { status_code: 500, err_code: -1, affected_rows: 0, message: 'internal server error' } };
   }
 };
-
-//module.exports = userController;

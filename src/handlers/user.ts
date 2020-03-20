@@ -14,7 +14,7 @@ const userHandler: any = {};
  *
  * @param {Object} req - request object
  * @param {Object} reply - response object
- * @description - user signup function
+ * @description - comman method for handle sip register functionality
  */
 userHandler.comman = async function (req: any, res: any, done: any) {
   try {
@@ -39,8 +39,6 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           await userModel.saveLog(body, transaction_log);
           res.send(body);
         }
-        // create transaction_log table
-
         break;
       case 'sip_authenticate_user_registration':
         validate = ajv.compile(userSchema.sip_reg_auth);
