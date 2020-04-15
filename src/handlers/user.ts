@@ -128,4 +128,41 @@ userHandler.comman = async function (req: any, res: any, done: any) {
   }
 };
 
+/**
+*
+* @param {Object} req - request object
+* @param {Object} reply - response object
+* @description -  Update PBX CDR INFO
+*/
+userHandler.savePBXCDRInfo = async function (req: any, res: any, done: any) {
+  const PBX_CDR_TEMP = await this.mongo.MONGO3.db.collection('PBX_CDR_TEMP');
+  const body = req.body;
+  const result = await userModel.savePBXCDR(body, PBX_CDR_TEMP);
+  console.log(result.result);
+  /*
+   "result": {
+                "n": 1,
+                "nModified": 1,
+                "ok": 1
+            },
+
+            {
+  n: 1,
+  nModified: 0,
+  upserted: [ { index: 0, _id: 5e96bc1f3f3344d493960ac5 } ],
+  ok: 1
+}
+  */
+  if (result.ok === 1 && result.nModified === 1) {
+    //updated response
+    res.send({ status_code: 200, error: -1, message: "Updated successfully" });
+  } else if (result.ok === 1 && result.nModified === 0) {
+    //insert response
+    res.send({ status_code: 200, error: -1, message: "Inserted successfully" });
+  } else {
+    // update error
+    res.send({ status_code: 404, error: 1, message: "Update error" })
+  }
+
+};
 module.exports = userHandler;

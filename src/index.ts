@@ -20,10 +20,22 @@ server.register(fastify_mongodb, {
 }).register(fastify_mongodb, {
   url: 'mongodb://smepbx:smeswitch@10.22.3.171:27017/unifiedring_pbx',
   name: 'MONGO2',
+}).register(fastify_mongodb, {
+  url: 'mongodb://smepbx:smeswitch@10.22.7.229:27017/unifiedring_pbx',
+  name: 'MONGO3',
 });
 
+/*
+kindly use below details.
+server: 10.22.7.229
+database: unifiedring_pbx
+login: smepbx
+password: smeswitch
+collection: PBX_CDR_TEMP
+*/
+
 //add hooks with relevant handlers
-server.addHook('preHandler', utils.formReqData);
+//server.addHook('preHandler', utils.formReqData);
 server.addHook('onResponse', utils.formResData);
 server.addHook('onError', utils.handleError);
 

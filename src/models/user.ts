@@ -191,4 +191,24 @@ userModel.saveLog = (data: any, transLogColl: any) => {
   });
 }
 
+//savePBXCDR
+userModel.savePBXCDR = (data: any, PBXCDRColl: any) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log('save PBXCDR');
+      let dataArr = data;
+      dataArr.Calling_No = parseInt(data.Calling_No);
+      dataArr.Called_No = parseInt(data.Called_No);
+      dataArr.Call_DateTime = new Date(data.Call_DateTime);
+      dataArr.Connected_Time = new Date(data.Connected_Time);
+      dataArr.Disconnected_Time = new Date(data.Disconnected_Time);
+      dataArr.Call_Duration = parseInt(data.Call_Duration);
+      dataArr.holdDuration = parseInt(data.holdDuration);
+      const res = await PBXCDRColl.updateOne({ 'Uid': data.Uid }, { $set: dataArr }, { upsert: true });
+      resolve(res.result);
+    } catch (err) {
+      reject(err);
+    }
+  })
+}
 //module.exports = userModel;
