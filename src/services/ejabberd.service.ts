@@ -4,17 +4,18 @@
  */
 
 import axios from 'axios';
+import { config } from '../config/app';
 
 class Ejabberd {
     public bassUrl: string;
     constructor() {
-        this.bassUrl = 'http://82.113.74.51:5001/api';
+        this.bassUrl = config.ejabberdBaseUrl;
     }
 
-    public async getPresenceStatus() {
+    public async getPresenceStatus(user: string, server: string) {
         return await axios.post(this.bassUrl + '/get_presence', {
-            "user": "1644",
-            "server": "im01.unifiedring.co.uk"
+            "user": user,
+            "server": server
         })
             .then((response) => {
                 const res = response.data;
