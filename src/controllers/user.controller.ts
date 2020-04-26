@@ -5,6 +5,7 @@
 
 import { userModel } from '../models/user';
 import { utils } from '../utils/utils';
+import Ejabberd from '../services/ejabberd.service';
 export const userController: any = {};
 
 /**
@@ -153,13 +154,20 @@ userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) 
     let result = {};
     let data = body;
     let val: any = null;
+    let outputArr: any = {};
     let doaminDetails = await userModel.getDomains(sipDomain, data.domain_name);
     if (utils.isObject(doaminDetails)) {
       data.Domain_id = doaminDetails.domain_id;
       val = await userModel.getUser(sipRegister, data);
       if (utils.isObject(val) && val.length > 0) {
+        //get presence status
+        const ejabberd = new Ejabberd();
+        const presenceStatus = await ejabberd.getPresenceStatus();
+        outputArr['data'] = val;
+        outputArr['presence_status'] = presenceStatus;
+        //
         result = {
-          output: val,
+          output: outputArr,
           msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got Registered User Info Details' }
         };
       } else {
