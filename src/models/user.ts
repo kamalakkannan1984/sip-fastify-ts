@@ -205,7 +205,7 @@ userModel.savePBXCDR = (data: any, PBXCDRColl: any) => {
       dataArr.Call_Duration = parseInt(data.Call_Duration);
       dataArr.holdDuration = parseInt(data.holdDuration);
       const res = await PBXCDRColl.updateOne({ 'Uid': data.Uid }, { $set: dataArr }, { upsert: true });
-      resolve(res.result);
+      resolve(res);
     } catch (err) {
       reject(err);
     }

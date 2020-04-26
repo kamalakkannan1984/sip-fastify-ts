@@ -8,42 +8,106 @@ let user: any = {};
 /* ##################################################################################### */
 /**
  * {
-    
-    "Uid" : "1",
-    "Calling_No" : "05985566522",
-    "Called_No" : "0443808380",
-    "Call_DateTime" : ISODate("2020-03-19T21:04:24.780Z"),
-    "Connected_Time" : ISODate("2020-03-19T21:04:24.780Z"),
-    "Disconnected_Time" : ISODate("2020-03-19T21:04:24.780Z"),
-    "Call_Duration" : "634",
-    "Domain_Name" : "vectone",
-    "Domain_ID" : 2,
-    "CallFeature" : "exetension",
-    "PBXIP" : "192.168.1.10",
-    "PBXID" : "323",
-    "MGIP" : "192.168.2.33",
-    "MGID" : "485",
-    "bundleID" : "48545",
-    "operatorIP" : "10.22.13.1",
-    "calling_codec" : "192",
-    "calltype" : "moc",
-    "holdDuration" : "323",
-    "callforwarded" : true,
-    "callforward_No" : "044380380",
-    "Disconnect_Reason" : "0123333",
-    "DTMF_Pressed" : "temp",
-    "call_recording" : true,
-    "recordingtype" : 2,
-    "CallTransfer" : true,
-    "Transfer_No" : "044380380899",
-    "Conference_Type" : "temp",
-    "Conf_joiner_type" : 2,
-    "Conference_Number" : "temp",
-    "Conference_Ext" : "temp"
+    "trans_id": "123456789",
+    "db_type": 1,
+    "db_operation": "EXECUTE",
+    "db_name": "unifiedring_pbx",
+    "table_name": "PBX_CDR_TEMP",
+    "sp_name": "PBX_CDR_Info",
+    "input": {
+        "Uid": "590weact-qwert-qwert",
+        "Calling_No": "590",
+        "Called_No": "380",
+        "Call_DateTime": "2020-04-15T19:20:41.052Z",
+        "Connected_Time": "2020-04-15T19:20:41.052Z",
+        "Disconnected_Time": "2020-04-15T19:20:41.052Z",
+        "Call_Duration": "0:0:0",
+        "Domain_Name": "6367.UR.mundio.com",
+        "Domain_ID": 1674,
+        "CallFeature": "INTERNAL",
+        "PBXIP": "10.22.7.141",
+        "PBXID": 1,
+        "MGIP": "10.22.7.118",
+        "MGID": 1,
+        "bundleID": 0,
+        "operatorIP": "",
+        "calling_codec": "G711",
+        "called_coded": "G711",
+        "calltype": "INBOUND",
+        "holdDuration": "0:0:0",
+        "callforwarded": false,
+        "callforward_No": "",
+        "Disconnect_Reason": "NORMAL",
+        "DTMF_Pressed": "",
+        "call_recording": false,
+        "recordingtype": 0,
+        "CallTransfer": false,
+        "Transfer_No": "",
+        "Conference_Type": "",
+        "Conf_joiner_type": 0,
+        "Conference_Number": "",
+        "Conference_Ext": ""
+    }
 }
  */
-//user signup request schema
 user.commanReq = {
+    body: {
+        type: 'object',
+        properties: {
+            trans_id: { type: 'string' },
+            db_type: { type: 'number' },
+            db_name: { type: 'string', enum: ['XGREGISTAR', 'unifiedring_pbx'] },
+            db_operation: {
+                type: 'string',
+                enum: ['READ', 'WRITE', 'UPDATE', 'DELETE', 'EXECUTE'],
+            },
+            table_name: { type: 'string' },
+            sp_name: {
+                type: 'string', enum: ['PBX_CDR_Info']
+            },
+            input: {
+                type: 'object',
+                properties: {
+                    Uid: { type: 'string' },
+                    Calling_No: { type: "string" },
+                    Called_No: { type: "string" },
+                    Call_DateTime: { type: "string" },
+                    Connected_Time: { type: "string" },
+                    Disconnected_Time: { type: "string" },
+                    Call_Duration: { type: "string" },
+                    Domain_Name: { type: "string" },
+                    Domain_ID: { type: "number" },
+                    CallFeature: { type: "string" },
+                    PBXIP: { type: "string" },
+                    PBXID: { type: "string" },
+                    MGIP: { type: "string" },
+                    MGID: { type: "string" },
+                    bundleID: { type: "string" },
+                    operatorIP: { type: "string" },
+                    calling_codec: { type: "string" },
+                    calltype: { type: "string" },
+                    holdDuration: { type: "string" },
+                    callforwarded: { type: "boolean" },
+                    callforward_No: { type: "string" },
+                    Disconnect_Reason: { type: "string" },
+                    DTMF_Pressed: { type: "string" },
+                    call_recording: { type: "boolean" },
+                    recordingtype: { type: "number" },
+                    CallTransfer: { type: "boolean" },
+                    Transfer_No: { type: "string" },
+                    Conference_Type: { type: "string" },
+                    Conf_joiner_type: { type: "number" },
+                    Conference_Number: { type: "string" },
+                    Conference_Ext: { type: "string" }
+                },
+                required: ['Uid'],
+            },
+        },
+        required: ['trans_id', 'db_name', 'db_operation', 'table_name', 'sp_name', 'input'],
+    },
+};
+//user signup request schema
+/*user.commanReq = {
     body: {
         type: 'object',
         properties: {
@@ -82,15 +146,81 @@ user.commanReq = {
         },
         required: ['Uid'],
     },
-};
+}; */
 
-user.commanRes = {
+/*user.commanRes = {
     200: {
         type: 'object',
         properties: {
             status_code: { type: "number" },
             error: { type: "number" },
             message: { type: "string" }
+        },
+    },
+};*/
+
+user.commanRes = {
+    200: {
+        type: 'object',
+        properties: {
+            trans_id: { type: 'string' },
+            db_type: { type: 'number' },
+            db_name: { type: 'string', enum: ['XGREGISTAR', 'unifiedring_pbx'] },
+            db_operation: {
+                type: 'string',
+                enum: ['READ', 'WRITE', 'UPDATE', 'DELETE', 'EXECUTE'],
+            },
+            table_name: { type: 'string' },
+            sp_name: {
+                type: 'string', enum: ['PBX_CDR_Info']
+            },
+            input: {
+                type: 'object',
+                properties: {
+                    Uid: { type: 'string' },
+                    Calling_No: { type: "string" },
+                    Called_No: { type: "string" },
+                    Call_DateTime: { type: "string" },
+                    Connected_Time: { type: "string" },
+                    Disconnected_Time: { type: "string" },
+                    Call_Duration: { type: "string" },
+                    Domain_Name: { type: "string" },
+                    Domain_ID: { type: "number" },
+                    CallFeature: { type: "string" },
+                    PBXIP: { type: "string" },
+                    PBXID: { type: "string" },
+                    MGIP: { type: "string" },
+                    MGID: { type: "string" },
+                    bundleID: { type: "string" },
+                    operatorIP: { type: "string" },
+                    calling_codec: { type: "string" },
+                    calltype: { type: "string" },
+                    holdDuration: { type: "string" },
+                    callforwarded: { type: "boolean" },
+                    callforward_No: { type: "string" },
+                    Disconnect_Reason: { type: "string" },
+                    DTMF_Pressed: { type: "string" },
+                    call_recording: { type: "boolean" },
+                    recordingtype: { type: "number" },
+                    CallTransfer: { type: "boolean" },
+                    Transfer_No: { type: "string" },
+                    Conference_Type: { type: "string" },
+                    Conf_joiner_type: { type: "number" },
+                    Conference_Number: { type: "string" },
+                    Conference_Ext: { type: "string" }
+                },
+            },
+            output: {},
+            msg: {
+                type: 'object',
+                properties: {
+                    affected_rows: { type: 'number' },
+                    status_code: { type: 'number' },
+                    err_code: { type: 'number' },
+                    message: { type: 'string' },
+                    error: {}
+                },
+            },
         },
     },
 };

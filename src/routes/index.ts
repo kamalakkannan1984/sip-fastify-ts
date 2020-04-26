@@ -23,6 +23,6 @@ export const configureRoutes = (fastify: any, options: any, done: any) => {
     }
   }
   fastify.post('/api', opts, apihandler.comman);
-  fastify.post('/api/PBX_CDR_Info', schemaPBXCDR, apihandler.savePBXCDRInfo)
+  fastify.post('/api/PBX_CDR_Info', schemaPBXCDR, apihandler.pBXCDRInfo)
   done();
 };
