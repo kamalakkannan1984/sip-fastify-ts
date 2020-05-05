@@ -162,7 +162,7 @@ userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) 
       if (utils.isObject(val) && val.length > 0) {
         //get presence status
         const ejabberd = new Ejabberd();
-        const presenceStatus = await ejabberd.getPresenceStatus(data.Username, data.domain_name);
+        const presenceStatus = await ejabberd.getPresenceStatus(data.Username, 'im01.unifiedring.co.uk');
         outputArr['data'] = val;
         outputArr['presence_status'] = presenceStatus;
         //
