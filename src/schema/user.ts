@@ -20,12 +20,16 @@ user.commanReq = {
       },
       table_name: { type: 'string' },
       sp_name: {
-        type: 'string', enum: ['sip_do_user_registration',
+        type: 'string',
+        enum: [
+          'sip_do_user_registration',
           'sip_authenticate_user_registration',
           'sip_get_user_password',
           'sip_update_registered_status',
           'sip_delete_user_registration',
-          'sip_get_Registered_user_info']
+          'sip_get_Registered_user_info',
+          'PBX_CDR_Info',
+        ],
       },
       input: {
         type: 'object',
@@ -44,7 +48,7 @@ user.commanReq = {
           proxy_username: { type: 'string' },
           device_type: { type: 'string' },
           mac_address: { type: 'string' },
-          user_id: { type: 'string' }
+          user_id: { type: 'string' },
         },
       },
     },
@@ -64,12 +68,16 @@ user.commanRes = {
       },
       table_name: { type: 'string' },
       sp_name: {
-        type: 'string', enum: ['sip_do_user_registration',
+        type: 'string',
+        enum: [
+          'sip_do_user_registration',
           'sip_authenticate_user_registration',
           'sip_get_user_password',
           'sip_update_registered_status',
           'sip_delete_user_registration',
-          'sip_get_Registered_user_info']
+          'sip_get_Registered_user_info',
+          'PBX_CDR_Info',
+        ],
       },
       input: {
         type: 'object',
@@ -88,7 +96,7 @@ user.commanRes = {
           proxy_username: { type: 'string' },
           device_type: { type: 'string' },
           mac_address: { type: 'string' },
-          user_id: { type: 'string' }
+          user_id: { type: 'string' },
         },
       },
       output: {},
@@ -99,7 +107,7 @@ user.commanRes = {
           status_code: { type: 'number' },
           err_code: { type: 'number' },
           message: { type: 'string' },
-          error: {}
+          error: {},
         },
       },
     },
@@ -117,7 +125,7 @@ user.sip_reg_auth = {
         Call_id: { type: 'string' },
         domain_name: { type: 'string' },
         Contact_address: { type: 'string' },
-        Username: { type: 'string' }
+        Username: { type: 'string' },
       },
       required: ['Call_id', 'domain_name', 'Contact_address', 'Username'],
     },
@@ -134,7 +142,7 @@ user.sip_get_password = {
       type: 'object',
       properties: {
         user_id: { type: 'string' },
-        domain_name: { type: 'string' }
+        domain_name: { type: 'string' },
       },
       required: ['user_id', 'domain_name'],
     },
@@ -156,8 +164,7 @@ user.sip_update_status = {
         Call_id: { type: 'string' },
         domain_name: { type: 'string' },
         Username: { type: 'string' },
-        status: { type: 'number' }
-
+        status: { type: 'number' },
       },
       required: ['Call_id', 'domain_name', 'Username', 'status'],
     },
@@ -180,7 +187,7 @@ user.sip_delete_user = {
         Call_id: { type: 'string' },
         domain_name: { type: 'string' },
         Username: { type: 'string' },
-        Contact_address: { type: 'string' }
+        Contact_address: { type: 'string' },
       },
       required: ['Call_id', 'domain_name', 'Username', 'Contact_address'],
     },
@@ -196,7 +203,7 @@ user.sip_get_user = {
       type: 'object',
       properties: {
         domain_name: { type: 'string' },
-        Username: { type: 'string' }
+        Username: { type: 'string' },
       },
       required: ['domain_name', 'Username'],
     },

@@ -7,6 +7,7 @@
 import Ajv from 'ajv';
 import { userController } from '../controllers/user.controller';
 import { userSchema } from '../schema/user';
+import { pbxcdrInfoSchema } from '../schema/pbxcdrInfo';
 import { userModel } from '../models/user';
 import { pbxcdrController } from '../controllers/pbxcdr.controller';
 const userHandler: any = {};
@@ -38,7 +39,7 @@ userHandler.comman = async function (req: any, res: any, done: any) {
         } else {
           body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
           await userModel.saveLog(body, transaction_log);
-          console.log("after LOg");
+          console.log('after LOg');
           res.send(body);
         }
         // create transaction_log table
@@ -121,6 +122,21 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           res.send(body);
         }
         break;
+      case 'PBX_CDR_Info':
+        validate = ajv.compile(pbxcdrInfoSchema.pbxcdrinfoReq);
+        if (validate(body)) {
+          const PBX_CDR_TEMP = await this.mongo.MONGO3.db.collection('PBX_CDR_TEMP');
+          result = await pbxcdrController.savePBXCDRInfo(body.input, PBX_CDR_TEMP);
+          body.msg = result.msg;
+          body.output = result.output;
+          await userModel.saveLog(body, transaction_log);
+          res.send(body);
+        } else {
+          body.msg = { status_code: 400, message: validate.errors[0].message, error: validate.errors };
+          await userModel.saveLog(body, transaction_log);
+          res.send(body);
+        }
+        break;
       default:
         res.send({ msg: { status_code: 500, message: 'internal server error' } });
     }
@@ -130,11 +146,11 @@ userHandler.comman = async function (req: any, res: any, done: any) {
 };
 
 /**
-*
-* @param {Object} req - request object
-* @param {Object} reply - response object
-* @description -  Update PBX CDR INFO
-*/
+ *
+ * @param {Object} req - request object
+ * @param {Object} reply - response object
+ * @description -  Update PBX CDR INFO
+ */
 userHandler.pBXCDRInfo = async function (req: any, res: any, done: any) {
   try {
     let body = req.body;

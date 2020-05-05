@@ -19,10 +19,10 @@ export const configureRoutes = (fastify: any, options: any, done: any) => {
   const schemaPBXCDR = {
     schema: {
       body: pbxcdrInfoSchema.commanReq.body,
-      response: pbxcdrInfoSchema.commanRes
-    }
-  }
+      response: pbxcdrInfoSchema.commanRes,
+    },
+  };
   fastify.post('/api', opts, apihandler.comman);
-  fastify.post('/api/PBX_CDR_Info', schemaPBXCDR, apihandler.pBXCDRInfo)
+  //fastify.post('/api/PBX_CDR_Info', schemaPBXCDR, apihandler.pBXCDRInfo)
   done();
 };
