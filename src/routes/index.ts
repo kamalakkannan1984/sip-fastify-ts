@@ -4,7 +4,6 @@
  */
 
 import { userSchema } from '../schema/user';
-import { pbxcdrInfoSchema } from '../schema/pbxcdrInfo';
 /**
  * @param {Object} fastify - fastify
  */
@@ -16,12 +15,12 @@ export const configureRoutes = (fastify: any, options: any, done: any) => {
       response: userSchema.commanRes,
     },
   };
-  const schemaPBXCDR = {
+  /*const schemaPBXCDR = {
     schema: {
       body: pbxcdrInfoSchema.commanReq.body,
       response: pbxcdrInfoSchema.commanRes,
     },
-  };
+  };*/
   fastify.post('/api', opts, apihandler.comman);
   //fastify.post('/api/PBX_CDR_Info', schemaPBXCDR, apihandler.pBXCDRInfo)
   done();
