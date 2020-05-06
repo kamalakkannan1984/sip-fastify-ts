@@ -122,7 +122,7 @@ userHandler.comman = async function (req: any, res: any, done: any) {
           res.send(body);
         }
         break;
-      case 'PBX_CDR_Info':
+      case 'pbx_cdr_info':
         validate = ajv.compile(pbxcdrInfoSchema.pbxcdrinfoReq);
         if (validate(body)) {
           const PBX_CDR_TEMP = await this.mongo.MONGO3.db.collection('PBX_CDR_TEMP');
@@ -151,13 +151,13 @@ userHandler.comman = async function (req: any, res: any, done: any) {
  * @param {Object} reply - response object
  * @description -  Update PBX CDR INFO
  */
-userHandler.pBXCDRInfo = async function (req: any, res: any, done: any) {
+/*userHandler.pBXCDRInfo = async function (req: any, res: any, done: any) {
   try {
     let body = req.body;
     let result: any = {};
     const transaction_log = await this.mongo.MONGO2.db.collection('transaction_log');
     switch (body.sp_name) {
-      case 'PBX_CDR_Info':
+      case 'pbx_cdr_info':
         const PBX_CDR_TEMP = await this.mongo.MONGO3.db.collection('PBX_CDR_TEMP');
         result = await pbxcdrController.savePBXCDRInfo(body.input, PBX_CDR_TEMP);
         body.msg = result.msg;
@@ -172,5 +172,5 @@ userHandler.pBXCDRInfo = async function (req: any, res: any, done: any) {
   } catch (err) {
     res.send({ msg: { status_code: 500, message: 'internal server error' } });
   }
-};
+}; */
 module.exports = userHandler;

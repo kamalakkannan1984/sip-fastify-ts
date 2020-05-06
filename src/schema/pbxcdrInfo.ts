@@ -24,10 +24,10 @@ user.pbxcdrinfoReq = {
         Domain_ID: { type: 'number' },
         CallFeature: { type: 'string' },
         PBXIP: { type: 'string' },
-        PBXID: { type: 'string' },
+        PBXID: { type: 'number' },
         MGIP: { type: 'string' },
-        MGID: { type: 'string' },
-        bundleID: { type: 'string' },
+        MGID: { type: 'number' },
+        bundleID: { type: 'number' },
         operatorIP: { type: 'string' },
         calling_codec: { type: 'string' },
         calltype: { type: 'string' },
@@ -52,7 +52,7 @@ user.pbxcdrinfoReq = {
 
 //
 
-user.commanReq = {
+/*user.commanReq = {
   body: {
     type: 'object',
     properties: {
@@ -66,7 +66,7 @@ user.commanReq = {
       table_name: { type: 'string' },
       sp_name: {
         type: 'string',
-        enum: ['PBX_CDR_Info'],
+        enum: ['pbx_cdr_info'],
       },
       input: {
         type: 'object',
@@ -82,10 +82,10 @@ user.commanReq = {
           Domain_ID: { type: 'number' },
           CallFeature: { type: 'string' },
           PBXIP: { type: 'string' },
-          PBXID: { type: 'string' },
+          PBXID: { type: 'number' },
           MGIP: { type: 'string' },
-          MGID: { type: 'string' },
-          bundleID: { type: 'string' },
+          MGID: { type: 'number' },
+          bundleID: { type: 'number' },
           operatorIP: { type: 'string' },
           calling_codec: { type: 'string' },
           calltype: { type: 'string' },
@@ -124,7 +124,7 @@ user.commanRes = {
       table_name: { type: 'string' },
       sp_name: {
         type: 'string',
-        enum: ['PBX_CDR_Info'],
+        enum: ['pbx_cdr_info'],
       },
       input: {
         type: 'object',
@@ -175,6 +175,6 @@ user.commanRes = {
       },
     },
   },
-};
+}; */
 
 export const pbxcdrInfoSchema: any = user;

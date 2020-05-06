@@ -28,7 +28,7 @@ user.commanReq = {
           'sip_update_registered_status',
           'sip_delete_user_registration',
           'sip_get_Registered_user_info',
-          'PBX_CDR_Info',
+          'pbx_cdr_info',
         ],
       },
       input: {
@@ -76,7 +76,7 @@ user.commanRes = {
           'sip_update_registered_status',
           'sip_delete_user_registration',
           'sip_get_Registered_user_info',
-          'PBX_CDR_Info',
+          'pbx_cdr_info',
         ],
       },
       input: {
