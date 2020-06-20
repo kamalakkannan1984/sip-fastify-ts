@@ -6,50 +6,42 @@
 import axios from 'axios';
 import { config } from '../config/app';
 
-class Ejabberd {
-    public bassUrl: string;
-    constructor() {
-        this.bassUrl = config.ejabberdBaseUrl;
-    }
+/**
+ * Class defined to use Ejabberd server
+ */
+export default class Ejabberd {
+  public bassUrl: string;
+  constructor() {
+    this.bassUrl = config.ejabberdBaseUrl;
+  }
 
-
-    public async getPresenceStatus(user: string, server: string) {
-
-        return new Promise(async (resolve, reject) => {
-            try {
-                return await axios
-                    .post(this.bassUrl + '/user_sessions_info', {
-                        "user": user
-                    })
-                    .then((response) => {
-                        resolve(response.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        reject(error);
-                    });
-            } catch (err) {
-                console.log(err);
-                reject(err);
+  /**
+   * Get presence status from ejabberd server
+   * @param user
+   * @param server
+   */
+  public async getPresenceStatus(user: string) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        return await axios
+          .post(this.bassUrl + '/user_sessions_info', {
+            userId: user,
+          })
+          .then((response) => {
+            if (response.data.status_code === 200) {
+              resolve(response.data.result);
+            } else {
+              resolve([]);
             }
-        });
-
-        /*return await axios.post(this.bassUrl + '/user_sessions_info', {
-            "user": user
-        })
-            .then((response) => {
-                const res = response.data;
-                if (res.status_code === 200) {
-                    return res.result;
-                } else {
-                    return 0;
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-    }*/
-    }
-
-    export default Ejabberd;
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  }
+}

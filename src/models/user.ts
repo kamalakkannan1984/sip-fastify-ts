@@ -29,11 +29,27 @@ userModel.getDomains = (domainColl: any, domain_name: any) => {
   });
 };
 
-
 userModel.getDirDomains = (domainColl: any, domain_name: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await domainColl.findOne({ domain_name: domain_name }, { _id: 0, domain_id: 1 });
+      resolve(res);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+//getSipId
+userModel.getSipId = (dirUserColl: any, data: any, dirDomain_id: any) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const domain_id = '' + dirDomain_id;
+      //db.getCollection('dir_users').find({'user_id': '380', 'domain_id': '1674'})
+      const res = await dirUserColl.findOne(
+        { user_id: data.Username, domain_id: domain_id },
+        { _id: 0, sip_login_id: 1 },
+      );
       resolve(res);
     } catch (err) {
       reject(err);
@@ -70,7 +86,6 @@ userModel.deleteRegister = (regColl: any, data: any) => {
   });
 };
 
-
 userModel.authendicate = (regColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -88,8 +103,10 @@ userModel.authendicate = (regColl: any, data: any) => {
           console.log(err);
         }); */
       const res = await regColl.findOne({
-        Call_id: data.Call_id, Domain_id: data.Domain_id,
-        Username: data.Username, Contact_address: data.Contact_address
+        Call_id: data.Call_id,
+        Domain_id: data.Domain_id,
+        Username: data.Username,
+        Contact_address: data.Contact_address,
       });
 
       resolve(res);
@@ -105,7 +122,8 @@ userModel.checkPassword = (dirUsers: any, data: any) => {
     try {
       console.log('checkPassword');
       const res = await dirUsers.findOne({
-        user_id: data.user_id, domain_id: data.Domain_id
+        user_id: data.user_id,
+        domain_id: data.Domain_id,
       });
       resolve(res);
     } catch (err) {
@@ -119,11 +137,14 @@ userModel.updateStatus = (regColl: any, data: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log('updateStatus');
-      const res = await regColl.updateOne({
-        Call_id: data.Call_id,
-        Username: data.Username,
-        Domain_id: data.Domain_id
-      }, { $set: { status: data.status } });
+      const res = await regColl.updateOne(
+        {
+          Call_id: data.Call_id,
+          Username: data.Username,
+          Domain_id: data.Domain_id,
+        },
+        { $set: { status: data.status } },
+      );
 
       resolve(res);
     } catch (err) {
@@ -144,7 +165,7 @@ userModel.deleteUser = (regColl: any, data: any) => {
         Call_id: data.Call_id,
         Domain_id: data.Domain_id,
         Username: data.Username,
-        Contact_address: data.Contact_address
+        Contact_address: data.Contact_address,
       });
       resolve(deleteItem);
     } catch (err) {
@@ -161,13 +182,22 @@ userModel.getUser = (regColl: any, data: any) => {
       regColl
         .find({
           Domain_id: data.Domain_id,
-          Username: data.Username
+          Username: data.Username,
         })
-        .project({ _id: 0, Contact_address: 1, proxy_username: 1, status: 1, device_type: 1, Ipaddress: 1, prev_proxy_username: 1 })
+        .project({
+          _id: 0,
+          Contact_address: 1,
+          proxy_username: 1,
+          status: 1,
+          device_type: 1,
+          Ipaddress: 1,
+          prev_proxy_username: 1,
+          Call_id: 1,
+        })
         .toArray()
         .then((user: any) => {
           resolve(user);
-        })
+        });
     } catch (err) {
       reject(err);
     }
@@ -187,9 +217,8 @@ userModel.saveLog = (data: any, transLogColl: any) => {
     } catch (err) {
       reject(err);
     }
-
   });
-}
+};
 
 //savePBXCDR
 userModel.savePBXCDR = (data: any, PBXCDRColl: any) => {
@@ -204,11 +233,11 @@ userModel.savePBXCDR = (data: any, PBXCDRColl: any) => {
       dataArr.Disconnected_Time = new Date(data.Disconnected_Time);
       dataArr.Call_Duration = parseInt(data.Call_Duration);
       dataArr.holdDuration = parseInt(data.holdDuration);
-      const res = await PBXCDRColl.updateOne({ 'Uid': data.Uid }, { $set: dataArr }, { upsert: true });
+      const res = await PBXCDRColl.updateOne({ Uid: data.Uid }, { $set: dataArr }, { upsert: true });
       resolve(res);
     } catch (err) {
       reject(err);
     }
-  })
-}
+  });
+};
 //module.exports = userModel;

@@ -111,7 +111,9 @@ userHandler.comman = async function (req: any, res: any, done: any) {
         if (validate(body)) {
           const sipRegister = await this.mongo.MONGO2.db.collection('Sip_Register');
           const sipDomain = await this.mongo.MONGO2.db.collection('Sip_domain');
-          result = await userController.sipGetUser(body.input, sipRegister, sipDomain);
+          const dirDomains = await this.mongo.MONGO2.db.collection('dir_domains');
+          const dirUsers = await this.mongo.MONGO2.db.collection('dir_users');
+          result = await userController.sipGetUser(body.input, sipRegister, sipDomain, dirUsers, dirDomains);
           body.msg = result.msg;
           body.output = result.output;
           await userModel.saveLog(body, transaction_log);

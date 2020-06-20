@@ -4,9 +4,10 @@
  */
 
 export const config = {
-  server: {//10.22.7.29
+  server: {
+    //10.22.7.29
     host: process.env.HOST ? process.env.HOST : '10.22.7.29',
-    port: process.env.PORT ? process.env.PORT : 5001,
+    port: process.env.PORT ? process.env.PORT : 5002,
   },
   logger_level: process.env.LOGGER_LEVEL,
   jwt_secret: process.env.JWT_SECRET ? process.env.JWT_SECRET : 'sscret',

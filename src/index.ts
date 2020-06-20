@@ -14,16 +14,19 @@ const server: fastify.FastifyInstance<Server, IncomingMessage, ServerResponse> =
 
 server.register(require('fastify-swagger'), config.swagger_options);
 server.register(require('fastify-cors'), config.cors_options);
-server.register(fastify_mongodb, {
-  url: 'mongodb://java:javadb@10.22.7.230:27017/XGREGISTAR',
-  name: 'MONGO1',
-}).register(fastify_mongodb, {
-  url: 'mongodb://smepbx:smeswitch@10.22.3.171:27017/unifiedring_pbx',
-  name: 'MONGO2',
-}).register(fastify_mongodb, {
-  url: 'mongodb://smepbx:smeswitch@10.22.7.229:27017/unifiedring_pbx',
-  name: 'MONGO3',
-});
+server
+  .register(fastify_mongodb, {
+    url: 'mongodb://java:javadb@10.22.7.230:27017/XGREGISTAR',
+    name: 'MONGO1',
+  })
+  .register(fastify_mongodb, {
+    url: 'mongodb://smepbx:smeswitch@10.22.3.171:27017/unifiedring_pbx',
+    name: 'MONGO2',
+  });
+/*.register(fastify_mongodb, {
+    url: 'mongodb://smepbx:smeswitch@10.22.7.229:27017/unifiedring_pbx',
+    name: 'MONGO3',
+  });*/
 
 /*
 kindly use below details.
@@ -58,12 +61,12 @@ const ajv = new Ajv({
 });
 
 //set fastify default schema compiler
-server.setSchemaCompiler(schema => {
+server.setSchemaCompiler((schema) => {
   return ajv.compile(schema);
 });
 
 //handle unhandled exception
-process.on('uncaughtException', err => {
+process.on('uncaughtException', (err) => {
   server.log.error(err);
 });
 

@@ -29,12 +29,12 @@ userController.sipRegister = async (body: any, regColl: any, domainColl: any) =>
       const val = await userModel.getUser(regColl, data);
       result = {
         output: val,
-        msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Sip registration completed' }
+        msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Sip registration completed' },
       };
     } else {
       result = {
         output: {},
-        msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' }
+        msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' },
       };
     }
     return result;
@@ -45,7 +45,6 @@ userController.sipRegister = async (body: any, regColl: any, domainColl: any) =>
 
 userController.sipRegisterAuth = async (body: any, sipRegister: any, sipDomain: any) => {
   try {
-
     let result = {};
     let data = body;
     let val: any = null;
@@ -62,7 +61,6 @@ userController.sipRegisterAuth = async (body: any, sipRegister: any, sipDomain: 
       } else {
         result = { status_code: 422, err_code: 0, affected_rows: 0, message: 'Need authentication' };
       }
-
     } else {
       result = { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' };
     }
@@ -74,7 +72,6 @@ userController.sipRegisterAuth = async (body: any, sipRegister: any, sipDomain: 
 
 userController.sipGetUserPassword = async (body: any, dirUsers: any, dirDomains: any) => {
   try {
-
     let result = {};
     let data = body;
     let val: any = null;
@@ -85,15 +82,19 @@ userController.sipGetUserPassword = async (body: any, dirUsers: any, dirDomains:
       if (utils.isObject(val)) {
         result = {
           output: { password: val.password },
-          msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got user password' }
+          msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got user password' },
         };
       } else {
         result = {
           output: {},
-          msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'No entry available for user_id in dir_users' }
+          msg: {
+            status_code: 422,
+            err_code: -1,
+            affected_rows: 0,
+            message: 'No entry available for user_id in dir_users',
+          },
         };
       }
-
     } else {
       result = { msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'invalid domain' } };
     }
@@ -149,31 +150,61 @@ userController.sipDeleteUser = async (body: any, sipRegister: any, sipDomain: an
   }
 };
 
-userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) => {
+userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any, dirUsers: any, dirDomains: any) => {
   try {
     let result = {};
     let data = body;
     let val: any = null;
     let outputArr: any = {};
+    let presence: any = [];
     let doaminDetails = await userModel.getDomains(sipDomain, data.domain_name);
     if (utils.isObject(doaminDetails)) {
       data.Domain_id = doaminDetails.domain_id;
       val = await userModel.getUser(sipRegister, data);
       if (utils.isObject(val) && val.length > 0) {
+        // find sip login id
+        let dirDoaminDetails = await userModel.getDirDomains(dirDomains, data.domain_name);
+        const sipId = await userModel.getSipId(dirUsers, data, dirDoaminDetails.id);
+        console.log(sipId.sip_login_id);
         //get presence status
-        const ejabberd = new Ejabberd();
-        const presenceStatus = await ejabberd.getPresenceStatus(data.Username, 'im01.unifiedring.co.uk');
+        if (sipId.sip_login_id !== null) {
+          const ejabberd = new Ejabberd();
+          presence = await ejabberd.getPresenceStatus(sipId.sip_login_id);
+          console.log(presence);
+          for (let i = 0; i < val.length; i++) {
+            if (presence.length !== 0) {
+              for (let j = 0; j < presence.length; j++) {
+                if (presence[j].resource === val[i].Call_id) {
+                  if ((presence[j].status = 'available')) {
+                    val[i].presence_status = 1;
+                  } else {
+                    val[i].presence_status = 0;
+                  }
+                } else {
+                  val[i].presence_status = 0;
+                }
+              }
+            } else {
+              val[i].presence_status = 0;
+            }
+          }
+        } else {
+          for (let i = 0; i < val.length; i++) {
+            val[i].presence_status = 0;
+          }
+        }
+
         outputArr['data'] = val;
-        outputArr['presence_status'] = presenceStatus;
+        outputArr['presence_status'] = presence;
         //
         result = {
           output: val,
-          msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got Registered User Info Details' }
+          msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got Registered User Info Details' },
         };
       } else {
         result = {
           output: {},
-          msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'No entry found in Sip_Register' }
+          msg: { status_code: 422, err_code: -1, affected_rows: 0, message: 'No entry found in Sip_Register' },
         };
       }
     } else {
