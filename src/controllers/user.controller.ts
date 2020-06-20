@@ -167,7 +167,7 @@ userController.sipGetUser = async (body: any, sipRegister: any, sipDomain: any) 
         outputArr['presence_status'] = presenceStatus;
         //
         result = {
-          output: outputArr,
+          output: val,
           msg: { status_code: 200, err_code: 0, affected_rows: 1, message: 'Got Registered User Info Details' }
         };
       } else {

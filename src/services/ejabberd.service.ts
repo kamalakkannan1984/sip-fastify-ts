@@ -12,19 +12,35 @@ class Ejabberd {
         this.bassUrl = config.ejabberdBaseUrl;
     }
 
+
     public async getPresenceStatus(user: string, server: string) {
-        return await axios.post(this.bassUrl + '/get_presence', {
-            "user": user,
-            "server": server
+
+        return new Promise(async (resolve, reject) => {
+            try {
+                return await axios
+                    .post(this.bassUrl + '/user_sessions_info', {
+                        "user": user
+                    })
+                    .then((response) => {
+                        resolve(response.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(error);
+                    });
+            } catch (err) {
+                console.log(err);
+                reject(err);
+            }
+        });
+
+        /*return await axios.post(this.bassUrl + '/user_sessions_info', {
+            "user": user
         })
             .then((response) => {
                 const res = response.data;
                 if (res.status_code === 200) {
-                    if (res.result.show === 'available') {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+                    return res.result;
                 } else {
                     return 0;
                 }
@@ -33,7 +49,7 @@ class Ejabberd {
                 console.log(error);
             });
 
+    }*/
     }
-}
 
-export default Ejabberd;
+    export default Ejabberd;

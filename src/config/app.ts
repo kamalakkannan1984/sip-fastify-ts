@@ -13,7 +13,7 @@ export const config = {
   basic_uname: process.env.BASIC_UNAME,
   basic_pw: process.env.BASIC_PW,
   apiRoutePrefix: '/api',
-  ejabberdBaseUrl: 'http://82.113.74.51:5001/api',
+  ejabberdBaseUrl: 'http://82.113.74.51:5002/api',
   cors_options: {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
